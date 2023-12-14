@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div *ngIf="isLoading" class="loading-overlay">
+        <div class="loading-text">Loading...</div>
+    </div>
+
+    <div *ngIf="!isLoading">
+
+        <div class="pre-btn">
+            <button class="prePage" (click)="onPreviousClick()">Previous Page</button>
+            <button class="next-btn" (click)="onNextClick()">Next Page</button>
+
+        </div>
+
+        <div *ngFor="let user of cardDataArray" class="card">
+            <img [src]="user.en.imagepaths[0].url ? user.en.imagepaths[0].url : 'https://guwahatiplus.com/public/web/images/default-news.png'"
+                alt="image">
+            <h2>{{ user.en.heading }}</h2>
+            <p class="extractionsourcelabel" style="font-size: 10px; text-align: left;">{{ user.en.extractionsourcelabel
+                }}</p>
+            <div style="display: flex; align-items: baseline; font-style: normal;">
+                <h6 style="text-align: left;">{{ user.en.author }},</h6>
+                <h6 style="margin-left: 5px;">{{ user.en.date | date:'yyyy-MM-dd' }}</h6>
+            </div>
+
+            <h6 style="text-align: right; margin-top: -14px;">{{ user.en.category }}</h6>
+            <p style="text-align: left; margin-top: 5px;">{{ user.en.content}}</p>
+        </div>
+
+        <div class="pre-btn">
+            <button class="prePage" (click)="onPreviousClick()">Previous Page</button>
+            <button class="next-btn" (click)="onNextClick()">Next Page</button>
+        </div>
+    </div>
+
+
+    <!-- <button (click)="onNextClick()" class="next-button">Next Page</button> -->
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>
