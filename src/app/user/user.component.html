@@ -21,20 +21,33 @@
 
         </div>
 
+  <div class="main">
+
         <div *ngFor="let user of cardDataArray" class="card">
-            <img [src]="user.en.imagepaths[0].url ? user.en.imagepaths[0].url : 'https://guwahatiplus.com/public/web/images/default-news.png'"
-                alt="image">
-            <h2>{{ user.en.heading }}</h2>
-            <p class="extractionsourcelabel" style="font-size: 10px; text-align: left;">{{ user.en.extractionsourcelabel
+            <img [src]="user.en.imagepaths[0]?.url || 'https://guwahatiplus.com/public/web/images/default-news.png'"
+         alt="image">
+
+
+            <a class="heading-link" style="text-decoration: none; text-align: center; align-items: center;" href="{{user.en.imagepaths[0].pcl}}" target="_blank"
+                rel="noopener noreferrer">{{ user.en.heading}}</a>
+
+
+                <a class="heading-link" *ngIf="!user.en.imagepaths[0]?.pcl">
+                    {{ user.en.heading }}
+                </a>
+
+            <p class="extractionsourcelabel" style="font-size: 10px; text-align: left;margin-bottom: 5px">{{
+                user.en.extractionsourcelabel
                 }}</p>
             <div style="display: flex; align-items: baseline; font-style: normal;">
-                <h6 style="text-align: left;">{{ user.en.author }},</h6>
+                <h6 style="text-align: left;">{{ user.en.author}},</h6>
                 <h6 style="margin-left: 5px;">{{ user.en.date | date:'yyyy-MM-dd' }}</h6>
             </div>
 
             <h6 style="text-align: right; margin-top: -14px;">{{ user.en.category }}</h6>
-            <p style="text-align: left; margin-top: 5px;">{{ user.en.content}}</p>
+            <p style="text-align: left; margin-top: 5px;">{{ user.en.content | truncate:45}}</p>
         </div>
+  </div>
 
         <div class="pre-btn">
             <button class="prePage" (click)="onPreviousClick()">Previous Page</button>
