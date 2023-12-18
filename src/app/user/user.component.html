@@ -31,10 +31,10 @@
 
                 <a class="heading-link" href="{{user.en.imagepaths[0].pcl}}" target="_blank"
                     rel="noopener noreferrer">{{
-                    user.en.heading}}</a>
+                    user.en.heading ?user.en.heading : "Heading not avaliable" }}</a>
 
                 <p class="extractionsourcelabel" style="font-size: 14px; text-align: left;margin-bottom: 5px">{{
-                    user.en.extractionsourcelabel
+                    user.en.extractionsourcelabel ? user.en.extractionsourcelabel : "not present extractionsourcelabel"
                     }}</p>
 
                 <div style="display: flex; justify-content: space-between; margin-top: 5px;">
@@ -49,13 +49,23 @@
                 </div>
 
                 <p style="text-align: left; margin-top: 9px;">{{ user.en.summary ? user.en.summary: user.en.content}}
+                    
                 </p>
 
                 <div style="display: flex;  font-style: normal; margin-top: 5px;" class="hover-text"
                     *ngIf="isHoveredIndex === i">
                     <h6 style="font-size: 16px; font-weight: 600; text-align: left;  color: rgba(165, 42, 42, 0.862);">
                         {{user.en.isSummarized ? "This news has been summarized.": "This news has not been summarized."}} </h6>
+                        
                 </div>
+
+
+                <div style="display: flex;  font-style: normal; margin-top: 5px;" class="hover-text"
+                *ngIf="isHoveredIndex === i">
+                <h6 style="font-size: 16px; font-weight: 600; text-align: left;  color: rgba(165, 42, 42, 0.862);">
+                    {{user.en.imageGenerationMethod ? "This image has been generated using DALLE2": "original image genrate."}} </h6>
+                    
+            </div>
             </div>
         </div>
 
