@@ -122,7 +122,7 @@ import { delay } from 'rxjs/operators';
 })
 export class UserComponent implements OnInit {
   cardDataArray: any[] = [];
-  currentPage = 20;
+  currentPage = 1;
   isLoading = false;
   isHoveredIndex: number = -1;
 
