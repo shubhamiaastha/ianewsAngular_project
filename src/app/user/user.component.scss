@@ -48,7 +48,6 @@
 
 .card img:hover::before,
 .card img.hovered::before {
-  content: "{{ cardDataArray[isHoveredIndex]?.en.author }}";
   display: block;
   position: absolute;
   top: 70%;

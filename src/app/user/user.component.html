@@ -10,7 +10,9 @@
 <body>
 
     <div *ngIf="isLoading" class="loading-overlay">
-        <div class="loading-text">Loading...</div>
+        <!-- <div class="loading-text">Loading...</div> -->
+        <img src="https://cdn.dribbble.com/users/24447/screenshots/1201310/inkling_spinner.gif" alt="">
+            <div class="loading-text">Loading...</div>
     </div>
 
     <div *ngIf="!isLoading">
@@ -31,13 +33,20 @@
             <div *ngFor="let user of cardDataArray;  let i = index" class="card" (mouseenter)="setHoveredIndex(i)"
                 (mouseleave)="setHoveredIndex(-1)">
 
-                <img [src]="user.en.imagepaths[0]?.url || user.en.imagepaths?.url "
-                    alt="image" [ngClass]="{'hovered': isHoveredIndex === i}">
+                
+                <img
+                *ngIf="user.en.imagepaths[0]?.url && !user.en.imageLoadError"
+                [src]="user.en.imagepaths[0]?.url"
+                alt="image"
+                [ngClass]="{ 'hovered': isHoveredIndex === i }"
+                (error)="handleImageError($event, user)"
+              />
 
-                    <a class="heading-link" *ngIf="user.en.heading" href="{{ user.en.imagepaths[0]?.pcl }}" target="_blank" rel="noopener noreferrer">
+
+                    <a class="heading-link" *ngIf="user.en.heading" href="{{user.en.url}}" target="_blank" rel="noopener noreferrer">
                         {{ user.en.heading }}
                       </a>
-                      <span *ngIf="!user.en.heading">Custom Message for Missing Heading</span>
+                      <a  href="{{user.en.imagepaths[0]?.pcl}}" target="_blank" rel="noopener noreferrer"><span *ngIf="!user.en.heading">Missing Heading</span></a>
 
                 <p class="extractionsourcelabel" style="font-size: 14px; text-align: left;margin-bottom: 5px">{{
                     user.en.extractionsourcelabel ? user.en.extractionsourcelabel : "Not present"
