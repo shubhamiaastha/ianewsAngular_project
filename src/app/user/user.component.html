@@ -10,7 +10,9 @@
 <body>
 
     <div *ngIf="isLoading" class="loading-overlay">
-        <div class="loading-text">Loading...</div>
+        <!-- <div class="loading-text">Loading...</div> -->
+        <img src="https://cdn.dribbble.com/users/24447/screenshots/1201310/inkling_spinner.gif" alt="">
+            <div class="loading-text">Loading...</div>
     </div>
 
     <div *ngIf="!isLoading">
@@ -18,23 +20,36 @@
         <div class="pre-btn">
             <button class="prePage" (click)="onPreviousClick()">Previous Page</button>
             <button class="next-btn" (click)="onNextClick()">Next Page</button>
-            <button style="background-color: chocolate;" class="next-btn" >Page {{currentPage}}</button>
-        </div>
+         </div>
 
         <div class="card-container">
 
-            <div *ngFor="let user of cardDataArray; let i = index" class="card" (mouseenter)="setHoveredIndex(i)"
+        <div style="width: 92% ; height: 20; background-image: linear-gradient(to right, rgb(0, 0, 0) , rgb(214, 236, 198)); border-radius: 7px; padding: 10px; "class="header">
+
+             <p style="color: white; font-size: 22px;">{{ currentPage > 1 ? '📰 Page ' + currentPage : '🔥 Latest News' }}
+            </p>
+        </div>
+
+            <div *ngFor="let user of cardDataArray;  let i = index" class="card" (mouseenter)="setHoveredIndex(i)"
                 (mouseleave)="setHoveredIndex(-1)">
 
-                <img [src]="user.en.imagepaths[0]?.url || 'https://guwahatiplus.com/public/web/images/default-news.png'"
-                    alt="image" [ngClass]="{'hovered': isHoveredIndex === i}">
+                
+                <img
+                *ngIf="user.en.imagepaths[0]?.url && !user.en.imageLoadError"
+                [src]="user.en.imagepaths[0]?.url"
+                alt="image"
+                [ngClass]="{ 'hovered': isHoveredIndex === i }"
+                (error)="handleImageError($event, user)"
+              />
 
-                <a class="heading-link" href="{{user.en.imagepaths[0].pcl}}" target="_blank"
-                    rel="noopener noreferrer">{{
-                    user.en.heading ?user.en.heading : "Heading not avaliable" }}</a>
+
+                    <a class="heading-link" *ngIf="user.en.heading" href="{{user.en.url}}" target="_blank" rel="noopener noreferrer">
+                        {{ user.en.heading }}
+                      </a>
+                      <a  href="{{user.en.imagepaths[0]?.pcl}}" target="_blank" rel="noopener noreferrer"><span *ngIf="!user.en.heading">Missing Heading</span></a>
 
                 <p class="extractionsourcelabel" style="font-size: 14px; text-align: left;margin-bottom: 5px">{{
-                    user.en.extractionsourcelabel ? user.en.extractionsourcelabel : "not present extractionsourcelabel"
+                    user.en.extractionsourcelabel ? user.en.extractionsourcelabel : "Not present"
                     }}</p>
 
                 <div style="display: flex; justify-content: space-between; margin-top: 5px;">
@@ -52,20 +67,32 @@
                     
                 </p>
 
-                <div style="display: flex;  font-style: normal; margin-top: 5px;" class="hover-text"
+                <div style="  font-style: normal; margin-top: 8px;" class="hover-text"
                     *ngIf="isHoveredIndex === i">
                     <h6 style="font-size: 16px; font-weight: 600; text-align: left;  color: rgba(165, 42, 42, 0.862);">
-                        {{user.en.isSummarized ? "This news has been summarized.": "This news has not been summarized."}} </h6>
+                        {{user.en.isSummarized ? "This news has been summarized.": "This news has not been summarized."}}</h6>
+
+                        <!-- <h6 style="font-size: 16px; font-weight: 600; text-align: left;  color: rgba(165, 42, 42, 0.862);">
+                            {{user.en.imageGenerationMethod ? "This image has been generated using DALLE2": "This image has been generated from the original image."}} </h6> -->
+                        
                         
                 </div>
 
 
-                <div style="display: flex;  font-style: normal; margin-top: 5px;" class="hover-text"
+                <div style="display: flex;  font-style: normal; margin-top: 8px;" class="hover-text"
                 *ngIf="isHoveredIndex === i">
                 <h6 style="font-size: 16px; font-weight: 600; text-align: left;  color: rgba(165, 42, 42, 0.862);">
-                    {{user.en.imageGenerationMethod ? "This image has been generated using DALLE2": "original image genrate."}} </h6>
+                    {{user.en.imageGenerationMethod ? "This image has been generated using DALLE2": "This image has been generated from the news."}} </h6>
                     
             </div>
+
+
+            <div style="display: flex;  font-style: normal; margin-top: 8px;" class="hover-text"
+            *ngIf="isHoveredIndex === i">
+            <h6 style="font-size: 16px; font-weight: 600; text-align: left;  color: rgba(0, 0, 0, 0.862);">
+               NewsId:- {{user.en._id}} </h6>
+                
+        </div>
             </div>
         </div>
 
