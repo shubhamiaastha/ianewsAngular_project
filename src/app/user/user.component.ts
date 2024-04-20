@@ -12,6 +12,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class UserComponent implements OnInit {
   cardDataArray: any[] = [];
   currentPage = 1;
+  lastNewsId = "";
+  firstNewsId= "";
   isLoading = false;
   isHoveredIndex: number = -1;
 
@@ -19,14 +21,14 @@ export class UserComponent implements OnInit {
     private sanitizer: DomSanitizer) {}
 
   ngOnInit() {
-    this.loadPage();
+    this.loadPage("","");
   }
 
-  async loadPage() {
+  async loadPage(newsId : string , cursor : string) {
     this.isLoading = true;
 
     try {
-      const data: any = await this.newData.news(this.currentPage)
+      const data: any = await this.newData.news(newsId,cursor)
         .pipe(
           delay(500) // Adjust the delay time as needed
         )
@@ -36,6 +38,8 @@ export class UserComponent implements OnInit {
 
       if (data && data.data && Array.isArray(data.data.news)) {
         this.cardDataArray = data.data.news;
+        this.lastNewsId = data.data.nextCursor
+        this.firstNewsId = data.data.prevCursor
         console.log('Card Data Array:', this.cardDataArray);
       } else {
         console.error('Invalid data response:', data);
@@ -61,13 +65,13 @@ export class UserComponent implements OnInit {
 
   async onNextClick() {
     this.currentPage++;
-    await this.loadPage();
+    await this.loadPage(this.lastNewsId,"nextCursor");
   }
 
   async onPreviousClick() {
     if (this.currentPage > 1) {
       this.currentPage--;
-      await this.loadPage();
+      await this.loadPage(this.firstNewsId,"prevCursor");
     }
   }
 }

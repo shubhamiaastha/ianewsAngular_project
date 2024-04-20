@@ -6,13 +6,21 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class NewsDataService {
-  apiUrl = 'https://prod.maritimes.news/api/news/latest/internal';
+  apiUrl = 'http://localhost:8000/api/news/latest/internal';
 
   constructor(private http: HttpClient) {}
 
-  news(page?: number): Observable<any> {
-    const url = page ? `${this.apiUrl}?page=${page}` : this.apiUrl;
+  news(newsId?: string , cursor?: string): Observable<any> {
+    //const url = page ? `${this.apiUrl}?${page}`: this.apiUrl;
     // Add your headers or any other configuration as needed
+    var url = ""
+    if(cursor === "nextCursor")
+       url = newsId? `${this.apiUrl}?limit=${5}&lastNewsId=${newsId}`: this.apiUrl;
+    else if(cursor === "prevCursor")
+       url = newsId? `${this.apiUrl}?limit=${5}&firstNewsId=${newsId}` : this.apiUrl;
+    else url = this.apiUrl+`?limit=${5}`
+
+    console.log(url)
     return this.http.get(url);
   }
 }
