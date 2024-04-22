@@ -15,10 +15,10 @@ export class NewsDataService {
     // Add your headers or any other configuration as needed
     var url = ""
     if(cursor === "nextCursor")
-       url = newsId? `${this.apiUrl}?limit=${5}&lastNewsId=${newsId}`: this.apiUrl;
+       url = newsId? `${this.apiUrl}?lastNewsId=${newsId}`: this.apiUrl;
     else if(cursor === "prevCursor")
-       url = newsId? `${this.apiUrl}?limit=${5}&firstNewsId=${newsId}` : this.apiUrl;
-    else url = this.apiUrl+`?limit=${5}`
+       url = newsId? `${this.apiUrl}?firstNewsId=${newsId}` : this.apiUrl;
+    else url = this.apiUrl
 
     console.log(url)
     return this.http.get(url);

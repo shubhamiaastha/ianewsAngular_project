@@ -36,12 +36,26 @@ export class UserComponent implements OnInit {
 
       console.log('API Response for Page', this.currentPage, ':', data);
 
-      if (data && data.data && Array.isArray(data.data.news)) {
+      if (data && data.data && Array.isArray(data.data.news) && cursor === "nextCursor") {
         this.cardDataArray = data.data.news;
         this.lastNewsId = data.data.nextCursor
         this.firstNewsId = data.data.prevCursor
         console.log('Card Data Array:', this.cardDataArray);
-      } else {
+      }
+      else if (data && data.data && Array.isArray(data.data.news) && cursor === "prevCursor") {
+        this.cardDataArray = data.data.news;
+        this.cardDataArray.reverse()
+        this.lastNewsId = data.data.nextCursor
+        this.firstNewsId = data.data.prevCursor
+        console.log('Card Data Array:', this.cardDataArray);
+      }
+      else if (data && data.data && Array.isArray(data.data.news) && cursor === "") {
+        this.cardDataArray = data.data.news;
+        this.lastNewsId = data.data.nextCursor
+        this.firstNewsId = data.data.prevCursor
+        console.log('Card Data Array:', this.cardDataArray);
+      }
+      else {
         console.error('Invalid data response:', data);
       }
     } catch (error) {
