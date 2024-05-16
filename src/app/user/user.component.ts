@@ -12,8 +12,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class UserComponent implements OnInit {
   cardDataArray: any[] = [];
   currentPage = 1;
-  lastNewsId = "";
-  firstNewsId= "";
+  latestNewsId = "";
+  oldestNewsId= "";
   isLoading = false;
   isHoveredIndex: number = -1;
 
@@ -36,23 +36,23 @@ export class UserComponent implements OnInit {
 
       console.log('API Response for Page', this.currentPage, ':', data);
 
-      if (data && data.data && Array.isArray(data.data.news) && cursor === "nextCursor") {
+      if (data && data.data && Array.isArray(data.data.news) && cursor == "") {
         this.cardDataArray = data.data.news;
-        this.lastNewsId = data.data.nextCursor
-        this.firstNewsId = data.data.prevCursor
+        this.latestNewsId = data.data.maxTs
+        this.oldestNewsId = data.data.minTs
         console.log('Card Data Array:', this.cardDataArray);
       }
-      else if (data && data.data && Array.isArray(data.data.news) && cursor === "prevCursor") {
+      else if (data && data.data && Array.isArray(data.data.news) && cursor == "nextCursor") {
+        this.cardDataArray = data.data.news;
+        this.latestNewsId = data.data.maxTs
+        this.oldestNewsId = data.data.minTs
+        console.log('Card Data Array:', this.cardDataArray);
+      }
+      else if (data && data.data && Array.isArray(data.data.news) && cursor == "prevCursor") {
         this.cardDataArray = data.data.news;
         this.cardDataArray.reverse()
-        this.lastNewsId = data.data.nextCursor
-        this.firstNewsId = data.data.prevCursor
-        console.log('Card Data Array:', this.cardDataArray);
-      }
-      else if (data && data.data && Array.isArray(data.data.news) && cursor === "") {
-        this.cardDataArray = data.data.news;
-        this.lastNewsId = data.data.nextCursor
-        this.firstNewsId = data.data.prevCursor
+        this.latestNewsId = data.data.maxTs
+        this.oldestNewsId = data.data.minTs
         console.log('Card Data Array:', this.cardDataArray);
       }
       else {
@@ -79,13 +79,13 @@ export class UserComponent implements OnInit {
 
   async onNextClick() {
     this.currentPage++;
-    await this.loadPage(this.lastNewsId,"nextCursor");
+    await this.loadPage(this.oldestNewsId,"nextCursor");
   }
 
   async onPreviousClick() {
     if (this.currentPage > 1) {
       this.currentPage--;
-      await this.loadPage(this.firstNewsId,"prevCursor");
+      await this.loadPage(this.latestNewsId,"prevCursor");
     }
   }
 }

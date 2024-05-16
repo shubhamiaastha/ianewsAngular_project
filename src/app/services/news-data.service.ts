@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class NewsDataService {
-  apiUrl = 'http://localhost:8000/api/news/latest/internal';
+  apiUrl = ' https://prod.maritimes.news/api/v2/news/latest/internal';
 
   constructor(private http: HttpClient) {}
 
@@ -15,9 +15,9 @@ export class NewsDataService {
     // Add your headers or any other configuration as needed
     var url = ""
     if(cursor === "nextCursor")
-       url = newsId? `${this.apiUrl}?lastNewsId=${newsId}`: this.apiUrl;
+       url = newsId? `${this.apiUrl}?oldestTs=${newsId}`: this.apiUrl;
     else if(cursor === "prevCursor")
-       url = newsId? `${this.apiUrl}?firstNewsId=${newsId}` : this.apiUrl;
+       url = newsId? `${this.apiUrl}?latestTs=${newsId}` : this.apiUrl;
     else url = this.apiUrl
 
     console.log(url)
